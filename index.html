@@ -4,396 +4,512 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>رووم مانسيناكم</title>
-  <meta name="theme-color" content="#14070a" />
+  <meta name="theme-color" content="#08030b" />
 
   <style>
-    :root{
-      --bg1:#120507;
-      --bg2:#2c0810;
-      --bg3:#641325;
-      --gold1:#ffe5ad;
-      --gold2:#ffc86f;
-      --gold3:#ff9d57;
-      --text:#fff8ea;
-      --muted:#f5e2c2cc;
-      --glass:#120d12cc;
-      --line:#ffffff1a;
-      --shadow:#0000007a;
+    :root {
+      --line: #ffffff2a;
+      --txt: #fff7e6;
+      --muted: #ffe7bfd4;
+      --gold-1: #ffe6ac;
+      --gold-2: #ffc769;
+      --gold-3: #ff9851;
+      --panel: #130d16e6;
+      --shadow: #00000099;
     }
 
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    html,body{
-      margin:0;
-      min-height:100%;
-      font-family:"Tahoma","Segoe UI",sans-serif;
-      color:var(--text);
-      overflow:hidden;
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow: hidden;
+      font-family: "Tahoma", "Segoe UI", sans-serif;
+      color: var(--txt);
+      background: #050209;
     }
 
-    body{
-      display:grid;
-      place-items:center;
+    body {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -7;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 30%, #8d1e48 0%, #160710 45%, #060208 100%);
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.12);
+      filter: saturate(1.3) contrast(1.2) brightness(0.48) blur(0.4px);
+      animation: bgPulse 12s ease-in-out infinite;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: -6;
       background:
-        radial-gradient(circle at 12% 18%, #c11e39 0%, transparent 22%),
-        radial-gradient(circle at 87% 20%, #861240 0%, transparent 24%),
-        radial-gradient(circle at 75% 78%, #4c0f63 0%, transparent 22%),
-        linear-gradient(135deg,var(--bg1),var(--bg2) 48%,var(--bg3));
-      padding:20px;
-      position:relative;
+        radial-gradient(circle at center, transparent 38%, rgba(0,0,0,.62) 80%),
+        linear-gradient(180deg, rgba(2,1,5,.45) 0%, rgba(3,2,8,.7) 50%, rgba(2,1,4,.92) 100%);
+      pointer-events: none;
     }
 
-    .ambient,
-    .ambient::before,
-    .ambient::after{
-      position:fixed;
-      inset:-20%;
-      pointer-events:none;
+    .bg-fire {
+      position: fixed;
+      inset: 0;
+      z-index: -5;
+      pointer-events: none;
+      background:
+        radial-gradient(1200px 420px at 50% 112%, #ff8f3a33 0%, transparent 55%),
+        radial-gradient(760px 280px at 12% 108%, #ff3d7d20 0%, transparent 60%),
+        radial-gradient(760px 280px at 88% 108%, #ffb86a22 0%, transparent 60%);
+      animation: fireShift 9s ease-in-out infinite;
     }
 
-    .ambient{
-      background:conic-gradient(from 0deg, transparent, #ffffff10, transparent 28%, transparent 70%, #ffd27a14, transparent);
-      animation:spin 18s linear infinite;
-      filter:blur(8px);
+    .aurora,
+    .aurora::before,
+    .aurora::after {
+      position: fixed;
+      inset: -32%;
+      z-index: -4;
+      pointer-events: none;
     }
 
-    .ambient::before,
-    .ambient::after{
-      content:"";
-      position:absolute;
-      border-radius:50%;
-      filter:blur(55px);
+    .aurora {
+      background: conic-gradient(from 0deg, transparent, #ffffff11, transparent 36%, #ffbe630f, transparent 70%, #ff4f8914, transparent);
+      animation: spin 24s linear infinite;
+      filter: blur(7px);
     }
 
-    .ambient::before{
-      width:320px;
-      height:320px;
-      top:10%;
-      right:7%;
-      background:#ffbe6d2e;
-      animation:floatY 7s ease-in-out infinite;
+    .aurora::before,
+    .aurora::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(76px);
     }
 
-    .ambient::after{
-      width:280px;
-      height:280px;
-      left:8%;
-      bottom:8%;
-      background:#ff4d7b20;
-      animation:floatY 9s ease-in-out infinite reverse;
+    .aurora::before {
+      width: 430px;
+      height: 430px;
+      top: 6%;
+      right: 2%;
+      background: #ffcc7642;
+      animation: floatY 8s ease-in-out infinite;
     }
 
-    .stars{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.45;
+    .aurora::after {
+      width: 380px;
+      height: 380px;
+      bottom: 4%;
+      left: 2%;
+      background: #ff4d772d;
+      animation: floatY 10s ease-in-out infinite reverse;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: .14;
       background-image:
-        radial-gradient(circle at 10% 15%, #fff9 0 1px, transparent 2px),
-        radial-gradient(circle at 26% 75%, #fff7 0 1px, transparent 2px),
-        radial-gradient(circle at 81% 14%, #fff7 0 1px, transparent 2px),
-        radial-gradient(circle at 70% 60%, #fff6 0 1px, transparent 2px),
-        radial-gradient(circle at 48% 34%, #fff6 0 1px, transparent 2px),
-        radial-gradient(circle at 90% 82%, #fff6 0 1px, transparent 2px);
-      animation:twinkle 4s ease-in-out infinite alternate;
+        radial-gradient(circle at 10% 20%, #ffffff 0 1px, transparent 1px),
+        radial-gradient(circle at 80% 30%, #ffffff 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 90%, #ffffff 0 1px, transparent 1px);
+      background-size: 220px 220px;
+      animation: drift 18s linear infinite;
     }
 
-    .wrap{
-      position:relative;
-      z-index:2;
-      width:min(94vw,620px);
+    .shell {
+      width: min(99vw, 1240px);
+      position: relative;
+      z-index: 2;
+      animation: enter 1s cubic-bezier(.2,.7,.2,1);
     }
 
-    .card{
-      position:relative;
-      overflow:hidden;
-      background:linear-gradient(180deg,#1b1117d9,#100b0fdc);
-      border:1px solid var(--line);
-      border-radius:30px;
-      padding:34px 24px 24px;
+    .hero {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #ffffff30;
+      background: #ffffff10;
+      box-shadow: inset 0 1px 0 #ffffff22;
+      color: var(--gold-1);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .tag-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--gold-1), var(--gold-3));
+      box-shadow: 0 0 16px #ffc97c;
+    }
+
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(2.7rem, 6.2vw, 6rem);
+      line-height: 1.14;
+      color: var(--gold-1);
+      text-shadow: 0 5px 36px #ffba5a33;
+      letter-spacing: .35px;
+    }
+
+    .sub {
+      margin: 0 auto;
+      max-width: 900px;
+      color: var(--muted);
+      line-height: 1.95;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .panel {
+      border-radius: 38px;
+      background: linear-gradient(180deg, #1b1219f0, var(--panel));
+      border: 1px solid var(--line);
       box-shadow:
-        0 30px 80px var(--shadow),
-        inset 0 1px 0 #ffffff1c,
-        inset 0 -1px 0 #00000030;
-      backdrop-filter:blur(10px);
-      animation:rise .9s ease;
+        0 34px 100px var(--shadow),
+        0 0 0 1px #ffffff11 inset,
+        0 0 80px #ffb05a18;
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      position: relative;
     }
 
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:0;
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background:
-        linear-gradient(135deg,#ffffff14,transparent 22%,transparent 72%,#ffd27a0c),
-        radial-gradient(circle at top right,#ffd27a18,transparent 30%);
-      pointer-events:none;
+        linear-gradient(130deg, #ffffff16, transparent 19%, transparent 77%, #ffcc7311),
+        radial-gradient(circle at top left, #ffcc7d1c, transparent 36%);
+      pointer-events: none;
     }
 
-    .halo-top{
-      position:absolute;
-      top:-70px;
-      left:-50px;
-      width:180px;
-      height:180px;
-      background:radial-gradient(circle,#ffd27a22 0%,transparent 70%);
-      pointer-events:none;
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      position: relative;
+      z-index: 1;
     }
 
-    .halo-bottom{
-      position:absolute;
-      bottom:-90px;
-      right:-60px;
-      width:220px;
-      height:220px;
-      background:radial-gradient(circle,#ff7f5030 0%,transparent 70%);
-      pointer-events:none;
+    .media {
+      position: relative;
+      min-height: 620px;
+      border-inline-start: 1px solid #ffffff20;
+      background: #0a070c;
     }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      margin-bottom:16px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid #ffffff22;
-      background:#ffffff0b;
-      color:var(--gold1);
-      font-size:.88rem;
-      box-shadow:inset 0 1px 0 #ffffff12;
+    .media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.15) contrast(1.08);
     }
 
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:linear-gradient(180deg,var(--gold1),var(--gold3));
-      box-shadow:0 0 14px #ffcc7a;
-      flex:none;
+    .media-shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.65), transparent 42%);
+      pointer-events: none;
     }
 
-    h1{
-      margin:0 0 10px;
-      font-size:clamp(1.8rem,4vw,2.7rem);
-      line-height:1.3;
-      text-align:center;
-      color:var(--gold1);
-      text-shadow:0 2px 22px #ffb35f22;
+    .media-text {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      left: 18px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.7rem;
+      color: #fff4dd;
+      text-shadow: 0 3px 14px rgba(0,0,0,.66);
     }
 
-    .subtitle{
-      margin:0 auto 22px;
-      max-width:470px;
-      text-align:center;
-      line-height:1.9;
-      color:var(--muted);
-      font-size:1rem;
+    .content {
+      padding: 42px 32px 30px;
+      display: grid;
+      align-content: center;
     }
 
-    .divider{
-      width:110px;
-      height:1px;
-      margin:0 auto 22px;
-      background:linear-gradient(90deg,transparent,#ffd27a,transparent);
+    .welcome {
+      margin: 0 0 20px;
+      font-size: 1.65rem;
+      color: #fff2d7;
+      text-align: center;
+      font-weight: 800;
     }
 
-    .panel{
-      padding:18px;
-      border-radius:22px;
-      background:linear-gradient(180deg,#ffffff0d,#ffffff08);
-      border:1px solid #ffffff18;
-      box-shadow:inset 0 1px 0 #ffffff14;
+    .btns {
+      display: grid;
+      gap: 13px;
     }
 
-    .welcome{
-      text-align:center;
-      margin:0 0 18px;
-      font-size:1.05rem;
-      color:#fff4dc;
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 19px;
+      padding: 18px 20px;
+      font-size: 1.24rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .2s ease, background .2s ease;
+      width: 100%;
     }
 
-    .actions{
-      display:grid;
-      gap:12px;
+    .btn-enter {
+      color: #271207;
+      background: linear-gradient(100deg, var(--gold-1), var(--gold-2) 45%, var(--gold-3));
+      box-shadow: 0 18px 40px #ff934c48, inset 0 1px 0 #fff5d4;
+      position: relative;
+      overflow: hidden;
     }
 
-    button{
-      appearance:none;
-      border:none;
-      width:100%;
-      border-radius:16px;
-      padding:15px 18px;
-      font-size:1rem;
-      font-weight:700;
-      cursor:pointer;
-      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease, background .18s ease;
+    .btn-enter::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40%;
+      right: -55%;
+      background: linear-gradient(90deg, transparent, #ffffff78, transparent);
+      transform: skewX(-18deg);
+      animation: shine 2.8s ease-in-out infinite;
     }
 
-    .login-btn{
-      color:#2a1408;
-      background:linear-gradient(90deg,var(--gold1),var(--gold2) 52%,var(--gold3));
-      box-shadow:0 14px 34px #ff9b5233, inset 0 1px 0 #fff5d2;
+    .btn-play {
+      color: #fff6e6;
+      background: linear-gradient(180deg, #2a2430, #1a1520);
+      border: 1px solid #ffffff2f;
+      box-shadow: inset 0 1px 0 #ffffff1e, 0 12px 26px #00000045;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: .2px;
     }
 
-    .login-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 18px 40px #ff9b5242, inset 0 1px 0 #fff5d2;
+    .btn-play::before {
+      content: "▶";
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-size: .95rem;
+      color: #2a1408;
+      background: linear-gradient(160deg, #ffe6af, #ffbf67);
+      box-shadow: 0 0 16px #ffbf6659;
+      flex: none;
     }
 
-    .secondary-btn{
-      color:#fff7e9;
-      background:#ffffff12;
-      border:1px solid #ffffff26;
-      box-shadow:inset 0 1px 0 #ffffff12;
+    .btn-play.playing {
+      color: #2a1408;
+      background: linear-gradient(100deg, #ffeab9, #ffd488 45%, #ffb063);
+      border-color: transparent;
+      box-shadow: 0 15px 32px #ffc36a34, inset 0 1px 0 #fff7de;
     }
 
-    .secondary-btn:hover{
-      transform:translateY(-1px);
-      background:#ffffff16;
+    .btn-play.playing::before {
+      content: "❚❚";
+      font-size: .7rem;
+      letter-spacing: -1px;
+      color: #fff5dc;
+      background: linear-gradient(160deg, #3a2a3c, #241b2a);
+      box-shadow: 0 0 16px #2d1f31a6;
     }
 
-    .controls{
-      margin-top:16px;
-      padding:14px 14px 10px;
-      border-radius:18px;
-      background:#ffffff08;
-      border:1px solid #ffffff12;
+    .btn-mute {
+      color: #fff7e9;
+      background: #ffffff16;
+      border: 1px solid #ffffff2d;
+      box-shadow: inset 0 1px 0 #ffffff18;
     }
 
-    .controls-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-      color:#ffe8bb;
-      font-size:.95rem;
+    .btn-enter:hover,
+    .btn-play:hover,
+    .btn-mute:hover {
+      transform: translateY(-2px);
     }
 
-    .status{
-      font-size:.86rem;
-      color:#fff0ca;
-      opacity:.95;
+    .audio-box {
+      margin-top: 16px;
+      border-radius: 19px;
+      border: 1px solid #ffffff1c;
+      background: #ffffff0a;
+      padding: 14px 14px 11px;
     }
 
-    .range{
-      width:100%;
-      accent-color:#ffb15d;
-      cursor:pointer;
+    .audio-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 1.08rem;
+      color: #ffe6b8;
+      margin-bottom: 9px;
+      font-weight: 700;
     }
 
-    .autoplay-note{
-      margin-top:16px;
-      text-align:center;
-      color:#fff2d3a8;
-      font-size:.85rem;
-      line-height:1.8;
+    .status {
+      font-size: 1rem;
+      color: #fff3d1;
+      opacity: .95;
     }
 
-    .pulse-ring{
-      position:absolute;
-      inset:auto auto 22px 22px;
-      width:12px;
-      height:12px;
-      border-radius:50%;
-      background:#78ff9a;
-      box-shadow:0 0 12px #78ff9a;
+    .range {
+      width: 100%;
+      cursor: pointer;
+      accent-color: #ffaf5f;
+      height: 28px;
     }
 
-    .pulse-ring::after{
-      content:"";
-      position:absolute;
-      inset:-6px;
-      border:1px solid #78ff9a88;
-      border-radius:50%;
-      animation:pulse 1.8s infinite;
+    .note {
+      margin-top: 14px;
+      text-align: center;
+      color: #fff1cfb9;
+      font-size: 1rem;
+      line-height: 1.8;
+      font-weight: 600;
     }
 
-    @keyframes rise{
-      from{transform:translateY(18px) scale(.985);opacity:0}
-      to{transform:translateY(0) scale(1);opacity:1}
-    }
-
-    @keyframes spin{
-      to{transform:rotate(360deg)}
-    }
-
-    @keyframes floatY{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-18px)}
-    }
-
-    @keyframes twinkle{
-      from{opacity:.3}
-      to{opacity:.58}
-    }
-
-    @keyframes pulse{
-      0%{transform:scale(.7);opacity:1}
-      100%{transform:scale(2);opacity:0}
-    }
-
-    @media (max-width:600px){
-      .card{
-        padding:28px 18px 20px;
-        border-radius:24px;
+    @media (max-width: 980px) {
+      .panel-grid {
+        grid-template-columns: 1fr;
       }
 
-      .panel{
-        padding:15px;
+      .media {
+        order: -1;
+        min-height: 310px;
+        border-inline-start: none;
+        border-bottom: 1px solid #ffffff20;
       }
+
+      .content {
+        padding: 22px 18px 16px;
+      }
+
+      h1 {
+        font-size: clamp(2.1rem, 8vw, 3.8rem);
+      }
+
+      .sub {
+        font-size: 1rem;
+      }
+
+      .welcome {
+        font-size: 1.28rem;
+      }
+
+      button {
+        font-size: 1.08rem;
+        padding: 15px 15px;
+      }
+    }
+
+    @keyframes enter {
+      from { transform: translateY(24px) scale(.985); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes floatY {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    @keyframes shine {
+      0%, 100% { right: -55%; }
+      55% { right: 120%; }
+    }
+
+    @keyframes bgPulse {
+      0%,100% { transform: scale(1.12); }
+      50% { transform: scale(1.18); }
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-28px, -16px, 0); }
+    }
+
+    @keyframes fireShift {
+      0%,100% { opacity: .95; transform: translateY(0); }
+      50% { opacity: .7; transform: translateY(-14px); }
     }
   </style>
 </head>
 <body>
-  <div class="ambient"></div>
-  <div class="stars"></div>
+  <div class="video-bg">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="video.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="vignette"></div>
+  <div class="bg-fire"></div>
+  <div class="aurora"></div>
+  <div class="noise"></div>
 
-  <div class="wrap">
-    <main class="card">
-      <div class="halo-top"></div>
-      <div class="halo-bottom"></div>
-      <div class="pulse-ring"></div>
-
-      <div class="badge">
-        <span class="dot"></span>
-        <span>واجهة دخول خاصة</span>
-      </div>
-
+  <div class="shell">
+    <section class="hero">
+      <span class="tag"><span class="tag-dot"></span>دخول فاخر - تجربة مطوّرة</span>
       <h1>حياكم الله في رووم مانسيناكم</h1>
-      <p class="subtitle">
-      
-      </p>
+      <p class="sub">واجهة عملاقة وفخمة بخلفية قوية جدًا، فيديو سينمائي، وصوت قابل للتحكم الكامل.</p>
+    </section>
 
-      <div class="divider"></div>
+    <main class="panel">
+      <div class="panel-grid">
+        <div class="content">
+          <p class="welcome">جاهز للدخول؟ بضغطة واحدة تدخل للروم مباشرة.</p>
 
-      <section class="panel">
-        <p class="welcome">اضغط على الزر للدخول مباشرة</p>
-
-        <div class="actions">
-          <button class="login-btn" type="button" onclick="goToRoom()">
-            دخول الآن
-          </button>
-
-          <button class="secondary-btn" id="muteToggle" type="button">
-            كتم الصوت
-          </button>
-        </div>
-
-        <div class="controls">
-          <div class="controls-head">
-            <span>مستوى الصوت</span>
-            <span class="status" id="audioStatus">جاري تجهيز الصوت...</span>
+          <div class="btns">
+            <button class="btn-enter" type="button" onclick="goToRoom()">دخول الآن</button>
+            <button class="btn-play" id="playToggle" type="button">تشغيل الموسيقى</button>
+            <button class="btn-mute" id="muteToggle" type="button">كتم الصوت</button>
           </div>
-          <input class="range" type="range" id="volumeRange" min="0" max="100" value="70" />
+
+          <div class="audio-box">
+            <div class="audio-head">
+              <span>مستوى الصوت</span>
+              <span class="status" id="audioStatus">جاري تجهيز الصوت...</span>
+            </div>
+            <input class="range" type="range" id="volumeRange" min="0" max="100" value="70" />
+          </div>
+
+          <p class="note">إذا المتصفح منع التشغيل التلقائي، استخدم زر تشغيل الموسيقى مباشرة.</p>
         </div>
-      </section>
 
-      <div class="autoplay-note">
-
+        <div class="media">
+          <video autoplay muted loop playsinline preload="auto">
+            <source src="video.mp4" type="video/mp4" />
+          </video>
+          <div class="media-shade"></div>
+          <div class="media-text">أهلاً وسهلاً بكم ✨</div>
+        </div>
       </div>
     </main>
   </div>
@@ -406,6 +522,7 @@
     const ROOM_URL = "https://s4.63on.com/launch/admin/69ad5f2ee8da8";
 
     const music = document.getElementById("bgMusic");
+    const playBtn = document.getElementById("playToggle");
     const muteBtn = document.getElementById("muteToggle");
     const volumeRange = document.getElementById("volumeRange");
     const audioStatus = document.getElementById("audioStatus");
@@ -421,67 +538,44 @@
       audioStatus.textContent = text;
     }
 
-    function updateMuteButton() {
-      muteBtn.textContent = (music.muted || music.volume === 0) ? "تشغيل الصوت" : "كتم الصوت";
+    function updateButtons() {
+      muteBtn.textContent = (music.muted || music.volume === 0) ? "إلغاء الكتم" : "كتم الصوت";
+      const isPlaying = !music.paused && !music.ended;
+      playBtn.classList.toggle("playing", isPlaying);
+      playBtn.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+      playBtn.textContent = isPlaying ? "إيقاف الموسيقى" : "تشغيل الموسيقى";
     }
 
-    async function startMutedAutoplay() {
+    async function playMusic(forceUnmute = false) {
+      try {
+        if (forceUnmute) {
+          music.muted = false;
+          if (music.volume === 0) {
+            music.volume = 0.7;
+            volumeRange.value = 70;
+          }
+        }
+        await music.play();
+        setStatus(music.muted ? "الصوت جاهز" : "الصوت يعمل");
+      } catch (_) {
+        setStatus("بانتظار السماح");
+      }
+      updateButtons();
+    }
+
+    async function tryAutoStart() {
       try {
         music.muted = true;
         await music.play();
         setStatus("الصوت جاهز");
-        return true;
-      } catch (e) {
-        setStatus("بانتظار السماح");
-        return false;
-      }
-    }
-
-    async function unmuteWithRetry() {
-      try {
-        music.muted = false;
-        if (music.volume === 0) music.volume = 0.7;
-        await music.play();
-        setStatus("الصوت يعمل");
-      } catch (e) {
+      } catch (_) {
         setStatus("بانتظار تفاعل");
       }
-      updateMuteButton();
-    }
-
-    async function strongAutoplay() {
-      const played = await startMutedAutoplay();
-
-      if (played) {
-        setTimeout(async () => {
-          try {
-            music.muted = false;
-            await music.play();
-            setStatus("الصوت يعمل");
-          } catch (e) {
-            setStatus("جاهز للتشغيل");
-          }
-          updateMuteButton();
-        }, 300);
-
-        setTimeout(unmuteWithRetry, 900);
-        setTimeout(unmuteWithRetry, 1600);
-      } else {
-        updateMuteButton();
-      }
+      updateButtons();
     }
 
     async function unlockAudioOnce() {
-      try {
-        music.muted = false;
-        if (music.volume === 0) music.volume = 0.7;
-        await music.play();
-        setStatus("الصوت يعمل");
-      } catch (e) {
-        setStatus("تعذر التشغيل");
-      }
-
-      updateMuteButton();
+      await playMusic(true);
       removeUnlockListeners();
     }
 
@@ -492,6 +586,16 @@
       document.removeEventListener("keydown", unlockAudioOnce);
     }
 
+    playBtn.addEventListener("click", async () => {
+      if (music.paused) {
+        await playMusic(true);
+      } else {
+        music.pause();
+        setStatus("تم إيقاف الموسيقى");
+        updateButtons();
+      }
+    });
+
     muteBtn.addEventListener("click", async () => {
       if (music.muted || music.volume === 0) {
         music.muted = false;
@@ -499,54 +603,40 @@
           music.volume = 0.7;
           volumeRange.value = 70;
         }
-        try {
-          await music.play();
-          setStatus("الصوت يعمل");
-        } catch (e) {
-          setStatus("بانتظار السماح");
-        }
+        await playMusic(false);
       } else {
         music.muted = true;
         setStatus("تم كتم الصوت");
+        updateButtons();
       }
-
-      updateMuteButton();
     });
 
     volumeRange.addEventListener("input", async () => {
       const vol = Number(volumeRange.value) / 100;
       music.volume = vol;
-
       if (vol <= 0) {
         music.muted = true;
         setStatus("الصوت مكتوم");
       } else {
         music.muted = false;
-        try {
-          await music.play();
-          setStatus("الصوت يعمل");
-        } catch (e) {
-          setStatus("بانتظار السماح");
-        }
+        await playMusic(false);
       }
-
-      updateMuteButton();
+      updateButtons();
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      strongAutoplay();
-    });
-
-    window.addEventListener("load", () => {
-      strongAutoplay();
-    });
+    music.addEventListener("play", updateButtons);
+    music.addEventListener("pause", updateButtons);
+    music.addEventListener("ended", updateButtons);
+    document.addEventListener("DOMContentLoaded", tryAutoStart);
+    window.addEventListener("load", tryAutoStart);
 
     document.addEventListener("click", unlockAudioOnce, { passive: true });
     document.addEventListener("touchstart", unlockAudioOnce, { passive: true });
     document.addEventListener("pointerdown", unlockAudioOnce, { passive: true });
     document.addEventListener("keydown", unlockAudioOnce);
 
-    updateMuteButton();
+    updateButtons();
   </script>
 </body>
 </html>
+
