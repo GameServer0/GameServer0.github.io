@@ -3,188 +3,548 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>حياكم الله في رووم مانسيناكم</title>
+  <title>رووم مانسيناكم</title>
+  <meta name="theme-color" content="#14070a" />
+
   <style>
     :root{
-      --bg1:#22070a;
-      --bg2:#7a0f1c;
-      --gold:#ffd27a;
-      --card:#1b0f14d9;
-      --text:#fff4dc;
-      --accent:#ff7a45;
+      --bg1:#120507;
+      --bg2:#2c0810;
+      --bg3:#641325;
+      --gold1:#ffe5ad;
+      --gold2:#ffc86f;
+      --gold3:#ff9d57;
+      --text:#fff8ea;
+      --muted:#f5e2c2cc;
+      --glass:#120d12cc;
+      --line:#ffffff1a;
+      --shadow:#0000007a;
     }
-    *{box-sizing:border-box}
-    body{
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
       margin:0;
-      min-height:100vh;
+      min-height:100%;
       font-family:"Tahoma","Segoe UI",sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(circle at 15% 20%, #b51d30 0%, transparent 35%),
-        radial-gradient(circle at 85% 80%, #5f0e33 0%, transparent 40%),
-        linear-gradient(135deg,var(--bg1),var(--bg2));
-      display:grid;
-      place-items:center;
       overflow:hidden;
     }
-    .glow{position:fixed;inset:-20%;background:conic-gradient(from 0deg, transparent, #ffffff12, transparent);animation:spin 10s linear infinite;pointer-events:none}
-    .card{width:min(92vw,520px);background:var(--card);border:1px solid #ffffff24;backdrop-filter:blur(6px);border-radius:20px;padding:28px 22px;box-shadow:0 20px 60px #00000066;animation:rise .7s ease}
-    h1{margin:0 0 8px;font-size:clamp(1.4rem,3vw,2rem);color:var(--gold);text-align:center}
-    .sub{margin:0 0 20px;text-align:center;opacity:.92;font-size:.95rem}
-    .row{display:grid;gap:8px;margin-bottom:14px}
-    label{font-size:.95rem}
-    input{width:100%;border:1px solid #ffffff2f;background:#ffffff10;color:#fff;border-radius:12px;padding:12px;outline:none}
-    input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ffd27a2b}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-    button{border:none;border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:700}
-    .login-btn{flex:1;min-width:140px;background:linear-gradient(90deg,#ff9255,var(--accent));color:#23140b}
-    .mute-btn{background:#fff1;color:#fff;border:1px solid #ffffff3a}
-    .play-btn{display:none;width:100%;margin-top:10px;background:#ffd27a;color:#2a1707}
-    .volume-wrap{margin-top:12px;display:grid;gap:6px}
-    .volume-wrap label{font-size:.9rem;opacity:.9}
-    #volumeRange{width:100%;padding:0;accent-color:#ff9255;cursor:pointer}
-    @keyframes rise{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
-    @keyframes spin{to{transform:rotate(360deg)}}
+
+    body{
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(circle at 12% 18%, #c11e39 0%, transparent 22%),
+        radial-gradient(circle at 87% 20%, #861240 0%, transparent 24%),
+        radial-gradient(circle at 75% 78%, #4c0f63 0%, transparent 22%),
+        linear-gradient(135deg,var(--bg1),var(--bg2) 48%,var(--bg3));
+      padding:20px;
+      position:relative;
+    }
+
+    .ambient,
+    .ambient::before,
+    .ambient::after{
+      position:fixed;
+      inset:-20%;
+      pointer-events:none;
+    }
+
+    .ambient{
+      background:conic-gradient(from 0deg, transparent, #ffffff10, transparent 28%, transparent 70%, #ffd27a14, transparent);
+      animation:spin 18s linear infinite;
+      filter:blur(8px);
+    }
+
+    .ambient::before,
+    .ambient::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      filter:blur(55px);
+    }
+
+    .ambient::before{
+      width:320px;
+      height:320px;
+      top:10%;
+      right:7%;
+      background:#ffbe6d2e;
+      animation:floatY 7s ease-in-out infinite;
+    }
+
+    .ambient::after{
+      width:280px;
+      height:280px;
+      left:8%;
+      bottom:8%;
+      background:#ff4d7b20;
+      animation:floatY 9s ease-in-out infinite reverse;
+    }
+
+    .stars{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.45;
+      background-image:
+        radial-gradient(circle at 10% 15%, #fff9 0 1px, transparent 2px),
+        radial-gradient(circle at 26% 75%, #fff7 0 1px, transparent 2px),
+        radial-gradient(circle at 81% 14%, #fff7 0 1px, transparent 2px),
+        radial-gradient(circle at 70% 60%, #fff6 0 1px, transparent 2px),
+        radial-gradient(circle at 48% 34%, #fff6 0 1px, transparent 2px),
+        radial-gradient(circle at 90% 82%, #fff6 0 1px, transparent 2px);
+      animation:twinkle 4s ease-in-out infinite alternate;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      width:min(94vw,620px);
+    }
+
+    .card{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,#1b1117d9,#100b0fdc);
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:34px 24px 24px;
+      box-shadow:
+        0 30px 80px var(--shadow),
+        inset 0 1px 0 #ffffff1c,
+        inset 0 -1px 0 #00000030;
+      backdrop-filter:blur(10px);
+      animation:rise .9s ease;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(135deg,#ffffff14,transparent 22%,transparent 72%,#ffd27a0c),
+        radial-gradient(circle at top right,#ffd27a18,transparent 30%);
+      pointer-events:none;
+    }
+
+    .halo-top{
+      position:absolute;
+      top:-70px;
+      left:-50px;
+      width:180px;
+      height:180px;
+      background:radial-gradient(circle,#ffd27a22 0%,transparent 70%);
+      pointer-events:none;
+    }
+
+    .halo-bottom{
+      position:absolute;
+      bottom:-90px;
+      right:-60px;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle,#ff7f5030 0%,transparent 70%);
+      pointer-events:none;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:16px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid #ffffff22;
+      background:#ffffff0b;
+      color:var(--gold1);
+      font-size:.88rem;
+      box-shadow:inset 0 1px 0 #ffffff12;
+    }
+
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:linear-gradient(180deg,var(--gold1),var(--gold3));
+      box-shadow:0 0 14px #ffcc7a;
+      flex:none;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(1.8rem,4vw,2.7rem);
+      line-height:1.3;
+      text-align:center;
+      color:var(--gold1);
+      text-shadow:0 2px 22px #ffb35f22;
+    }
+
+    .subtitle{
+      margin:0 auto 22px;
+      max-width:470px;
+      text-align:center;
+      line-height:1.9;
+      color:var(--muted);
+      font-size:1rem;
+    }
+
+    .divider{
+      width:110px;
+      height:1px;
+      margin:0 auto 22px;
+      background:linear-gradient(90deg,transparent,#ffd27a,transparent);
+    }
+
+    .panel{
+      padding:18px;
+      border-radius:22px;
+      background:linear-gradient(180deg,#ffffff0d,#ffffff08);
+      border:1px solid #ffffff18;
+      box-shadow:inset 0 1px 0 #ffffff14;
+    }
+
+    .welcome{
+      text-align:center;
+      margin:0 0 18px;
+      font-size:1.05rem;
+      color:#fff4dc;
+    }
+
+    .actions{
+      display:grid;
+      gap:12px;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      width:100%;
+      border-radius:16px;
+      padding:15px 18px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease, background .18s ease;
+    }
+
+    .login-btn{
+      color:#2a1408;
+      background:linear-gradient(90deg,var(--gold1),var(--gold2) 52%,var(--gold3));
+      box-shadow:0 14px 34px #ff9b5233, inset 0 1px 0 #fff5d2;
+    }
+
+    .login-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 18px 40px #ff9b5242, inset 0 1px 0 #fff5d2;
+    }
+
+    .secondary-btn{
+      color:#fff7e9;
+      background:#ffffff12;
+      border:1px solid #ffffff26;
+      box-shadow:inset 0 1px 0 #ffffff12;
+    }
+
+    .secondary-btn:hover{
+      transform:translateY(-1px);
+      background:#ffffff16;
+    }
+
+    .controls{
+      margin-top:16px;
+      padding:14px 14px 10px;
+      border-radius:18px;
+      background:#ffffff08;
+      border:1px solid #ffffff12;
+    }
+
+    .controls-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      color:#ffe8bb;
+      font-size:.95rem;
+    }
+
+    .status{
+      font-size:.86rem;
+      color:#fff0ca;
+      opacity:.95;
+    }
+
+    .range{
+      width:100%;
+      accent-color:#ffb15d;
+      cursor:pointer;
+    }
+
+    .autoplay-note{
+      margin-top:16px;
+      text-align:center;
+      color:#fff2d3a8;
+      font-size:.85rem;
+      line-height:1.8;
+    }
+
+    .pulse-ring{
+      position:absolute;
+      inset:auto auto 22px 22px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#78ff9a;
+      box-shadow:0 0 12px #78ff9a;
+    }
+
+    .pulse-ring::after{
+      content:"";
+      position:absolute;
+      inset:-6px;
+      border:1px solid #78ff9a88;
+      border-radius:50%;
+      animation:pulse 1.8s infinite;
+    }
+
+    @keyframes rise{
+      from{transform:translateY(18px) scale(.985);opacity:0}
+      to{transform:translateY(0) scale(1);opacity:1}
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes floatY{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-18px)}
+    }
+
+    @keyframes twinkle{
+      from{opacity:.3}
+      to{opacity:.58}
+    }
+
+    @keyframes pulse{
+      0%{transform:scale(.7);opacity:1}
+      100%{transform:scale(2);opacity:0}
+    }
+
+    @media (max-width:600px){
+      .card{
+        padding:28px 18px 20px;
+        border-radius:24px;
+      }
+
+      .panel{
+        padding:15px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="glow"></div>
+  <div class="ambient"></div>
+  <div class="stars"></div>
 
-  <main class="card">
-    <h1>حياكم الله في رووم مانسيناكم</h1>
-    <p class="sub">نورتونا، تسجيل الدخول من هنا</p>
+  <div class="wrap">
+    <main class="card">
+      <div class="halo-top"></div>
+      <div class="halo-bottom"></div>
+      <div class="pulse-ring"></div>
 
-    <form id="loginForm" action="https://s4.63on.com/launch/admin/69ad5f2ee8da8" method="post">
-      <div class="row">
-        <label for="username">اسم المستخدم</label>
-        <input type="text" id="username" name="username" autocomplete="off" required />
+      <div class="badge">
+        <span class="dot"></span>
+        <span>واجهة دخول خاصة</span>
       </div>
-      <div class="row">
-        <label for="password">كلمة السر</label>
-        <input type="password" id="password" name="password" required />
-      </div>
-      <div class="actions">
-        <button class="login-btn" type="submit">دخول</button>
-        <button class="mute-btn" type="button" id="muteToggle">كتم الصوت</button>
-      </div>
-      <button class="play-btn" type="button" id="playMusicBtn">تشغيل الموسيقى</button>
-      <div class="volume-wrap">
-        <label for="volumeRange">مستوى الصوت</label>
-        <input type="range" id="volumeRange" min="0" max="100" value="70" />
-      </div>
-    </form>
-  </main>
 
-  <audio id="bgMusic" loop autoplay playsinline preload="auto">
+      <h1>حياكم الله في رووم مانسيناكم</h1>
+      <p class="subtitle">
+      
+      </p>
+
+      <div class="divider"></div>
+
+      <section class="panel">
+        <p class="welcome">اضغط على الزر للدخول مباشرة</p>
+
+        <div class="actions">
+          <button class="login-btn" type="button" onclick="goToRoom()">
+            دخول الآن
+          </button>
+
+          <button class="secondary-btn" id="muteToggle" type="button">
+            كتم الصوت
+          </button>
+        </div>
+
+        <div class="controls">
+          <div class="controls-head">
+            <span>مستوى الصوت</span>
+            <span class="status" id="audioStatus">جاري تجهيز الصوت...</span>
+          </div>
+          <input class="range" type="range" id="volumeRange" min="0" max="100" value="70" />
+        </div>
+      </section>
+
+      <div class="autoplay-note">
+
+      </div>
+    </main>
+  </div>
+
+  <audio id="bgMusic" loop autoplay muted playsinline preload="auto">
     <source src="https://videotourl.com/audio/1774754182251-5dccd15c-e73c-49c4-af8d-e002023e22ec.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
+    const ROOM_URL = "https://s4.63on.com/launch/admin/69ad5f2ee8da8";
+
     const music = document.getElementById("bgMusic");
     const muteBtn = document.getElementById("muteToggle");
-    const playBtn = document.getElementById("playMusicBtn");
     const volumeRange = document.getElementById("volumeRange");
-    const loginForm = document.getElementById("loginForm");
-
-    // ارفع الملف بهذا الاسم في نفس مسار index.html
-    const launcherFileUrl = "/launcher.jnlp";
-    const launcherDownloadName = "ما نسيناكم.jnlp";
-    let isSubmitting = false;
+    const audioStatus = document.getElementById("audioStatus");
 
     music.volume = 0.7;
-    music.muted = false;
+    volumeRange.value = 70;
+
+    function goToRoom() {
+      window.location.href = ROOM_URL;
+    }
+
+    function setStatus(text) {
+      audioStatus.textContent = text;
+    }
 
     function updateMuteButton() {
-      muteBtn.textContent = music.muted ? "إلغاء الكتم" : "كتم الصوت";
+      muteBtn.textContent = (music.muted || music.volume === 0) ? "تشغيل الصوت" : "كتم الصوت";
     }
 
-    async function downloadLauncherFile() {
+    async function startMutedAutoplay() {
       try {
-        const res = await fetch(launcherFileUrl + "?t=" + Date.now(), { cache: "no-store" });
-        if (!res.ok) throw new Error("Launcher file not found");
-
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = launcherDownloadName;
-        a.rel = "noopener";
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+        music.muted = true;
+        await music.play();
+        setStatus("الصوت جاهز");
+        return true;
       } catch (e) {
-        // fallback مباشر
-        const a = document.createElement("a");
-        a.href = launcherFileUrl + "?t=" + Date.now();
-        a.download = launcherDownloadName;
-        a.rel = "noopener";
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        setStatus("بانتظار السماح");
+        return false;
       }
     }
 
-    async function tryAutoplay() {
+    async function unmuteWithRetry() {
       try {
+        music.muted = false;
+        if (music.volume === 0) music.volume = 0.7;
         await music.play();
-        playBtn.style.display = "none";
+        setStatus("الصوت يعمل");
       } catch (e) {
-        playBtn.style.display = "block";
+        setStatus("بانتظار تفاعل");
       }
       updateMuteButton();
     }
 
-    loginForm.addEventListener("submit", async (e) => {
-      if (isSubmitting) return;
-      e.preventDefault();
-      isSubmitting = true;
+    async function strongAutoplay() {
+      const played = await startMutedAutoplay();
 
-      await downloadLauncherFile();
+      if (played) {
+        setTimeout(async () => {
+          try {
+            music.muted = false;
+            await music.play();
+            setStatus("الصوت يعمل");
+          } catch (e) {
+            setStatus("جاهز للتشغيل");
+          }
+          updateMuteButton();
+        }, 300);
 
-      setTimeout(() => {
-        loginForm.submit();
-      }, 280);
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      volumeRange.value = Math.round(music.volume * 100);
-      tryAutoplay();
-      setTimeout(tryAutoplay, 300);
-      setTimeout(tryAutoplay, 1200);
-    });
-
-    window.addEventListener("load", tryAutoplay);
-
-    playBtn.addEventListener("click", async () => {
-      music.muted = false;
-      try {
-        await music.play();
-        playBtn.style.display = "none";
-      } catch (e) {
-        playBtn.style.display = "block";
+        setTimeout(unmuteWithRetry, 900);
+        setTimeout(unmuteWithRetry, 1600);
+      } else {
+        updateMuteButton();
       }
+    }
+
+    async function unlockAudioOnce() {
+      try {
+        music.muted = false;
+        if (music.volume === 0) music.volume = 0.7;
+        await music.play();
+        setStatus("الصوت يعمل");
+      } catch (e) {
+        setStatus("تعذر التشغيل");
+      }
+
       updateMuteButton();
-    });
+      removeUnlockListeners();
+    }
+
+    function removeUnlockListeners() {
+      document.removeEventListener("click", unlockAudioOnce);
+      document.removeEventListener("touchstart", unlockAudioOnce);
+      document.removeEventListener("pointerdown", unlockAudioOnce);
+      document.removeEventListener("keydown", unlockAudioOnce);
+    }
 
     muteBtn.addEventListener("click", async () => {
-      music.muted = !music.muted;
-      if (!music.muted) {
-        try { await music.play(); } catch (e) { playBtn.style.display = "block"; }
+      if (music.muted || music.volume === 0) {
+        music.muted = false;
+        if (music.volume === 0) {
+          music.volume = 0.7;
+          volumeRange.value = 70;
+        }
+        try {
+          await music.play();
+          setStatus("الصوت يعمل");
+        } catch (e) {
+          setStatus("بانتظار السماح");
+        }
+      } else {
+        music.muted = true;
+        setStatus("تم كتم الصوت");
       }
+
       updateMuteButton();
     });
 
     volumeRange.addEventListener("input", async () => {
-      music.volume = Number(volumeRange.value) / 100;
-      music.muted = music.volume <= 0;
-      if (!music.muted) {
-        try { await music.play(); } catch (e) { playBtn.style.display = "block"; }
+      const vol = Number(volumeRange.value) / 100;
+      music.volume = vol;
+
+      if (vol <= 0) {
+        music.muted = true;
+        setStatus("الصوت مكتوم");
+      } else {
+        music.muted = false;
+        try {
+          await music.play();
+          setStatus("الصوت يعمل");
+        } catch (e) {
+          setStatus("بانتظار السماح");
+        }
       }
+
       updateMuteButton();
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      strongAutoplay();
+    });
+
+    window.addEventListener("load", () => {
+      strongAutoplay();
+    });
+
+    document.addEventListener("click", unlockAudioOnce, { passive: true });
+    document.addEventListener("touchstart", unlockAudioOnce, { passive: true });
+    document.addEventListener("pointerdown", unlockAudioOnce, { passive: true });
+    document.addEventListener("keydown", unlockAudioOnce);
 
     updateMuteButton();
   </script>
