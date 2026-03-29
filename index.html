@@ -86,15 +86,9 @@
     const volumeRange = document.getElementById("volumeRange");
     const loginForm = document.getElementById("loginForm");
 
-    // ترتيب روابط التحميل: اسم إنجليزي أولاً (الأكثر ثباتًا) ثم اسم عربي كاحتياطي.
-    const launcherCandidates = [
-      "https://gameserver0.github.io/launcher.jnlp",
-      "https://gameserver0.github.io/%D9%85%D8%A7%20%D9%86%D8%B3%D9%8A%D9%86%D8%A7%D9%83%D9%85.jnlp",
-      "/launcher.jnlp",
-      "/%D9%85%D8%A7%20%D9%86%D8%B3%D9%8A%D9%86%D8%A7%D9%83%D9%85.jnlp"
-    ];
-
-    let launcherFileUrl = launcherCandidates[0];
+    // ارفع الملف بهذا الاسم في نفس مسار index.html
+    const launcherFileUrl = "/launcher.jnlp";
+    const launcherDownloadName = "ما نسيناكم.jnlp";
     let isSubmitting = false;
 
     music.volume = 0.7;
@@ -104,27 +98,33 @@
       muteBtn.textContent = music.muted ? "إلغاء الكتم" : "كتم الصوت";
     }
 
-    async function resolveLauncherUrl() {
-      for (const url of launcherCandidates) {
-        try {
-          const res = await fetch(url, { method: "HEAD", cache: "no-store" });
-          if (res.ok) {
-            launcherFileUrl = url;
-            return;
-          }
-        } catch (e) {}
-      }
-    }
+    async function downloadLauncherFile() {
+      try {
+        const res = await fetch(launcherFileUrl + "?t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("Launcher file not found");
 
-    function downloadLauncher() {
-      const link = document.createElement("a");
-      link.href = launcherFileUrl + (launcherFileUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
-      link.setAttribute("download", "launcher.jnlp");
-      link.rel = "noopener";
-      link.style.display = "none";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = launcherDownloadName;
+        a.rel = "noopener";
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+      } catch (e) {
+        // fallback مباشر
+        const a = document.createElement("a");
+        a.href = launcherFileUrl + "?t=" + Date.now();
+        a.download = launcherDownloadName;
+        a.rel = "noopener";
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
     }
 
     async function tryAutoplay() {
@@ -137,21 +137,20 @@
       updateMuteButton();
     }
 
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       if (isSubmitting) return;
       e.preventDefault();
-
-      downloadLauncher();
-
       isSubmitting = true;
+
+      await downloadLauncherFile();
+
       setTimeout(() => {
         loginForm.submit();
-      }, 180);
+      }, 280);
     });
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
       volumeRange.value = Math.round(music.volume * 100);
-      await resolveLauncherUrl();
       tryAutoplay();
       setTimeout(tryAutoplay, 300);
       setTimeout(tryAutoplay, 1200);
