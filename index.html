@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حياكم الله في رووم مانسيناكم</title>
+  <style>
+    :root{
+      --bg1:#22070a;
+      --bg2:#7a0f1c;
+      --gold:#ffd27a;
+      --card:#1b0f14d9;
+      --text:#fff4dc;
+      --accent:#ff7a45;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Tahoma","Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, #b51d30 0%, transparent 35%),
+        radial-gradient(circle at 85% 80%, #5f0e33 0%, transparent 40%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+    .glow{
+      position:fixed;
+      inset:-20%;
+      background:conic-gradient(from 0deg, transparent, #ffffff12, transparent);
+      animation:spin 10s linear infinite;
+      pointer-events:none;
+    }
+    .card{
+      width:min(92vw,520px);
+      background:var(--card);
+      border:1px solid #ffffff24;
+      backdrop-filter: blur(6px);
+      border-radius:20px;
+      padding:28px 22px;
+      box-shadow:0 20px 60px #00000066;
+      animation:rise .7s ease;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(1.4rem,3vw,2rem);
+      color:var(--gold);
+      text-align:center;
+    }
+    .sub{
+      margin:0 0 20px;
+      text-align:center;
+      opacity:.92;
+      font-size:.95rem;
+    }
+    .row{display:grid;gap:8px;margin-bottom:14px}
+    label{font-size:.95rem}
+    input{
+      width:100%;
+      border:1px solid #ffffff2f;
+      background:#ffffff10;
+      color:#fff;
+      border-radius:12px;
+      padding:12px;
+      outline:none;
+    }
+    input:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px #ffd27a2b;
+    }
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    button{
+      border:none;
+      border-radius:12px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .login-btn{
+      flex:1;
+      min-width:140px;
+      background:linear-gradient(90deg,#ff9255,var(--accent));
+      color:#23140b;
+    }
+    .mute-btn{
+      background:#fff1;
+      color:#fff;
+      border:1px solid #ffffff3a;
+    }
+    .volume-wrap{
+      margin-top:12px;
+      display:grid;
+      gap:6px;
+    }
+    .volume-wrap label{
+      font-size:.9rem;
+      opacity:.9;
+    }
+    #volumeRange{
+      width:100%;
+      padding:0;
+      accent-color:#ff9255;
+      cursor:pointer;
+    }
+    @keyframes rise{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <main class="card">
+    <h1>حياكم الله في رووم مانسيناكم</h1>
+    <p class="sub">نورتونا، تسجيل الدخول من هنا</p>
+
+    <form action="https://s4.63on.com/launch/admin/69ad5f2ee8da8" method="post">
+      <div class="row">
+        <label for="username">اسم المستخدم</label>
+        <input type="text" id="username" name="username" autocomplete="off" required />
+      </div>
+      <div class="row">
+        <label for="password">كلمة السر</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="actions">
+        <button class="login-btn" type="submit">دخول</button>
+        <button class="mute-btn" type="button" id="muteToggle">كتم الصوت</button>
+      </div>
+      <div class="volume-wrap">
+        <label for="volumeRange">مستوى الصوت</label>
+        <input type="range" id="volumeRange" min="0" max="100" value="70" />
+      </div>
+    </form>
+  </main>
+
+  <audio id="bgMusic" loop autoplay muted playsinline preload="auto">
+    <source src="https://videotourl.com/audio/1774754182251-5dccd15c-e73c-49c4-af8d-e002023e22ec.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const music = document.getElementById("bgMusic");
+    const muteBtn = document.getElementById("muteToggle");
+    const volumeRange = document.getElementById("volumeRange");
+
+    music.volume = 0.7;
+
+    function updateBtn() {
+      muteBtn.textContent = music.muted ? "إلغاء الكتم" : "كتم الصوت";
+    }
+
+    async function startWithSound() {
+      try {
+        await music.play();
+      } catch (e) {}
+
+      music.muted = false;
+      updateBtn();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      startWithSound();
+      setTimeout(startWithSound, 300);
+      setTimeout(startWithSound, 1200);
+      volumeRange.value = Math.round(music.volume * 100);
+    });
+
+    window.addEventListener("load", startWithSound);
+    document.addEventListener("pointerdown", startWithSound, { once: true });
+
+    muteBtn.addEventListener("click", async () => {
+      music.muted = !music.muted;
+      if (!music.muted) {
+        try { await music.play(); } catch (e) {}
+      }
+      updateBtn();
+    });
+
+    volumeRange.addEventListener("input", async () => {
+      music.volume = Number(volumeRange.value) / 100;
+      if (music.volume <= 0) {
+        music.muted = true;
+      } else {
+        music.muted = false;
+        try { await music.play(); } catch (e) {}
+      }
+      updateBtn();
+    });
+
+    updateBtn();
+  </script>
+</body>
+</html>
