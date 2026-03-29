@@ -1,0 +1,48 @@
+
+  <?xml version='1.0' encoding='utf-8'?>
+  <jnlp spec='1.0+' xmlns:jfx='http://javafx.com' codebase='http://s4.63oon.com/java/' >
+
+      <information>
+          <title>http://s4.63oon.com/</title>
+          <vendor>روم سيرفر للقاعات الصوتية</vendor>
+          <homepage href='http://s4.63on.com/' />
+          <description> غرف طعون الصوتية </description>
+          <icon href='jnlp.png'/>
+      </information>
+
+
+      <application-desc>
+          <argument>mode=admin</argument>
+          <argument>server=s4.63on.com</argument>
+          <argument>room_id=69ad5f2ee8da8</argument>
+          <argument>user=</argument>
+          <argument>pass=</argument>
+          <argument>logo=</argument>
+          <argument>icon=</argument>
+          <argument>title=&حــيــلكم الله في رووم مانـسـيـــنـــاكـــم&</argument>
+          <argument>prompt=دخول</argument>
+          <argument>bg_color=#750911</argument>
+          <argument>fo_color=#080807</argument>
+          <argument>tcsize=300</argument>
+      </application-desc>
+
+      <security>
+          <all-permissions/>
+      </security>
+
+      <update check='always' policy='always' />
+
+      <resources os='Windows' arch='x86'>
+          <j2se version='1.6+'  />
+          <jar href='chat_32.jar' />
+		      <nativelib href='native_32.jar' /> 
+      </resources>
+
+      <resources os='Windows' arch='amd64'>
+          <j2se version='1.6+'  />
+          <jar href='chat_64.jar' />
+		      <nativelib href='native_64.jar' />
+      </resources>
+
+      <application-desc main-class='chat.room.server.Client' />
+  </jnlp>

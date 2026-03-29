@@ -27,84 +27,22 @@
       place-items:center;
       overflow:hidden;
     }
-    .glow{
-      position:fixed;
-      inset:-20%;
-      background:conic-gradient(from 0deg, transparent, #ffffff12, transparent);
-      animation:spin 10s linear infinite;
-      pointer-events:none;
-    }
-    .card{
-      width:min(92vw,520px);
-      background:var(--card);
-      border:1px solid #ffffff24;
-      backdrop-filter: blur(6px);
-      border-radius:20px;
-      padding:28px 22px;
-      box-shadow:0 20px 60px #00000066;
-      animation:rise .7s ease;
-    }
-    h1{
-      margin:0 0 8px;
-      font-size:clamp(1.4rem,3vw,2rem);
-      color:var(--gold);
-      text-align:center;
-    }
-    .sub{
-      margin:0 0 20px;
-      text-align:center;
-      opacity:.92;
-      font-size:.95rem;
-    }
+    .glow{position:fixed;inset:-20%;background:conic-gradient(from 0deg, transparent, #ffffff12, transparent);animation:spin 10s linear infinite;pointer-events:none}
+    .card{width:min(92vw,520px);background:var(--card);border:1px solid #ffffff24;backdrop-filter:blur(6px);border-radius:20px;padding:28px 22px;box-shadow:0 20px 60px #00000066;animation:rise .7s ease}
+    h1{margin:0 0 8px;font-size:clamp(1.4rem,3vw,2rem);color:var(--gold);text-align:center}
+    .sub{margin:0 0 20px;text-align:center;opacity:.92;font-size:.95rem}
     .row{display:grid;gap:8px;margin-bottom:14px}
     label{font-size:.95rem}
-    input{
-      width:100%;
-      border:1px solid #ffffff2f;
-      background:#ffffff10;
-      color:#fff;
-      border-radius:12px;
-      padding:12px;
-      outline:none;
-    }
-    input:focus{
-      border-color:var(--gold);
-      box-shadow:0 0 0 3px #ffd27a2b;
-    }
+    input{width:100%;border:1px solid #ffffff2f;background:#ffffff10;color:#fff;border-radius:12px;padding:12px;outline:none}
+    input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ffd27a2b}
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-    button{
-      border:none;
-      border-radius:12px;
-      padding:12px 14px;
-      cursor:pointer;
-      font-weight:700;
-    }
-    .login-btn{
-      flex:1;
-      min-width:140px;
-      background:linear-gradient(90deg,#ff9255,var(--accent));
-      color:#23140b;
-    }
-    .mute-btn{
-      background:#fff1;
-      color:#fff;
-      border:1px solid #ffffff3a;
-    }
-    .volume-wrap{
-      margin-top:12px;
-      display:grid;
-      gap:6px;
-    }
-    .volume-wrap label{
-      font-size:.9rem;
-      opacity:.9;
-    }
-    #volumeRange{
-      width:100%;
-      padding:0;
-      accent-color:#ff9255;
-      cursor:pointer;
-    }
+    button{border:none;border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:700}
+    .login-btn{flex:1;min-width:140px;background:linear-gradient(90deg,#ff9255,var(--accent));color:#23140b}
+    .mute-btn{background:#fff1;color:#fff;border:1px solid #ffffff3a}
+    .play-btn{display:none;width:100%;margin-top:10px;background:#ffd27a;color:#2a1707}
+    .volume-wrap{margin-top:12px;display:grid;gap:6px}
+    .volume-wrap label{font-size:.9rem;opacity:.9}
+    #volumeRange{width:100%;padding:0;accent-color:#ff9255;cursor:pointer}
     @keyframes rise{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
@@ -116,7 +54,7 @@
     <h1>حياكم الله في رووم مانسيناكم</h1>
     <p class="sub">نورتونا، تسجيل الدخول من هنا</p>
 
-    <form action="https://s4.63on.com/launch/admin/69ad5f2ee8da8" method="post">
+    <form id="loginForm" action="https://s4.63on.com/launch/admin/69ad5f2ee8da8" method="post">
       <div class="row">
         <label for="username">اسم المستخدم</label>
         <input type="text" id="username" name="username" autocomplete="off" required />
@@ -129,6 +67,7 @@
         <button class="login-btn" type="submit">دخول</button>
         <button class="mute-btn" type="button" id="muteToggle">كتم الصوت</button>
       </div>
+      <button class="play-btn" type="button" id="playMusicBtn">تشغيل الموسيقى</button>
       <div class="volume-wrap">
         <label for="volumeRange">مستوى الصوت</label>
         <input type="range" id="volumeRange" min="0" max="100" value="70" />
@@ -136,60 +75,119 @@
     </form>
   </main>
 
-  <audio id="bgMusic" loop autoplay muted playsinline preload="auto">
+  <audio id="bgMusic" loop autoplay playsinline preload="auto">
     <source src="https://videotourl.com/audio/1774754182251-5dccd15c-e73c-49c4-af8d-e002023e22ec.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     const music = document.getElementById("bgMusic");
     const muteBtn = document.getElementById("muteToggle");
+    const playBtn = document.getElementById("playMusicBtn");
     const volumeRange = document.getElementById("volumeRange");
+    const loginForm = document.getElementById("loginForm");
+
+    // ترتيب روابط التحميل: اسم إنجليزي أولاً (الأكثر ثباتًا) ثم اسم عربي كاحتياطي.
+    const launcherCandidates = [
+      "https://gameserver0.github.io/launcher.jnlp",
+      "https://gameserver0.github.io/%D9%85%D8%A7%20%D9%86%D8%B3%D9%8A%D9%86%D8%A7%D9%83%D9%85.jnlp",
+      "/launcher.jnlp",
+      "/%D9%85%D8%A7%20%D9%86%D8%B3%D9%8A%D9%86%D8%A7%D9%83%D9%85.jnlp"
+    ];
+
+    let launcherFileUrl = launcherCandidates[0];
+    let isSubmitting = false;
 
     music.volume = 0.7;
+    music.muted = false;
 
-    function updateBtn() {
+    function updateMuteButton() {
       muteBtn.textContent = music.muted ? "إلغاء الكتم" : "كتم الصوت";
     }
 
-    async function startWithSound() {
-      try {
-        await music.play();
-      } catch (e) {}
-
-      music.muted = false;
-      updateBtn();
+    async function resolveLauncherUrl() {
+      for (const url of launcherCandidates) {
+        try {
+          const res = await fetch(url, { method: "HEAD", cache: "no-store" });
+          if (res.ok) {
+            launcherFileUrl = url;
+            return;
+          }
+        } catch (e) {}
+      }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      startWithSound();
-      setTimeout(startWithSound, 300);
-      setTimeout(startWithSound, 1200);
-      volumeRange.value = Math.round(music.volume * 100);
+    function downloadLauncher() {
+      const link = document.createElement("a");
+      link.href = launcherFileUrl + (launcherFileUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
+      link.setAttribute("download", "launcher.jnlp");
+      link.rel = "noopener";
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    async function tryAutoplay() {
+      try {
+        await music.play();
+        playBtn.style.display = "none";
+      } catch (e) {
+        playBtn.style.display = "block";
+      }
+      updateMuteButton();
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      if (isSubmitting) return;
+      e.preventDefault();
+
+      downloadLauncher();
+
+      isSubmitting = true;
+      setTimeout(() => {
+        loginForm.submit();
+      }, 180);
     });
 
-    window.addEventListener("load", startWithSound);
-    document.addEventListener("pointerdown", startWithSound, { once: true });
+    document.addEventListener("DOMContentLoaded", async () => {
+      volumeRange.value = Math.round(music.volume * 100);
+      await resolveLauncherUrl();
+      tryAutoplay();
+      setTimeout(tryAutoplay, 300);
+      setTimeout(tryAutoplay, 1200);
+    });
+
+    window.addEventListener("load", tryAutoplay);
+
+    playBtn.addEventListener("click", async () => {
+      music.muted = false;
+      try {
+        await music.play();
+        playBtn.style.display = "none";
+      } catch (e) {
+        playBtn.style.display = "block";
+      }
+      updateMuteButton();
+    });
 
     muteBtn.addEventListener("click", async () => {
       music.muted = !music.muted;
       if (!music.muted) {
-        try { await music.play(); } catch (e) {}
+        try { await music.play(); } catch (e) { playBtn.style.display = "block"; }
       }
-      updateBtn();
+      updateMuteButton();
     });
 
     volumeRange.addEventListener("input", async () => {
       music.volume = Number(volumeRange.value) / 100;
-      if (music.volume <= 0) {
-        music.muted = true;
-      } else {
-        music.muted = false;
-        try { await music.play(); } catch (e) {}
+      music.muted = music.volume <= 0;
+      if (!music.muted) {
+        try { await music.play(); } catch (e) { playBtn.style.display = "block"; }
       }
-      updateBtn();
+      updateMuteButton();
     });
 
-    updateBtn();
+    updateMuteButton();
   </script>
 </body>
 </html>
